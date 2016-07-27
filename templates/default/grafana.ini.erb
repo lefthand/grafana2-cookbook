@@ -27,7 +27,11 @@ logs = <%= node['grafana']['log_dir'] %>
 http_port = <%= node['grafana']['port'] %>
 
 # The public facing domain name used to access grafana from a browser
-domain = <%= node['grafana']['domain'] %>
+;domain = <%= node['grafana']['domain'] %>
+
+# Redirect to correct domain if host header does not match domain
+# Prevents DNS rebinding attacks
+;enforce_domain = false
 
 # The full public facing url
 ;root_url = %(protocol)s://%(domain)s:%(http_port)s/
@@ -49,10 +53,12 @@ domain = <%= node['grafana']['domain'] %>
 [database]
 # Either "mysql", "postgres" or "sqlite3", it's your choice
 type = <%= node['grafana']['db_type'] %>
+<% unless node['grafana']['db_type'] == 'sqlite3' %>
 host = <%= node['grafana']['db_host'] %>:<%= node['grafana']['db_port'] %>
 name = <%= node['grafana']['db_name'] %>
 user = <%= node['grafana']['db_user'] %>
 password = <%= node['grafana']['db_password'] %>
+<% end %>
 
 # For "postgres" only, either "disable", "require" or "verify-full"
 ;ssl_mode = disable
@@ -88,6 +94,8 @@ provider_config = <%= node['grafana']['db_user'] %>:<%= node['grafana']['db_pass
 # running instances, dashboard and error counts. It is very helpful to us.
 # Change this option to false to disable reporting.
 ;reporting_enabled = true
+
+check_for_updates = true
 
 # Google Analytics universal tracking code, only enabled if you specify an id here
 ;google_analytics_ua_id =
@@ -190,6 +198,11 @@ level = <%= node['grafana']['log_level'] %>
 
 # Expired days of log file(delete after max days), default is 7
 ;max_days = 7
+
+#################################### Dashboard JSON files ##########################
+[dashboards.json]
+enabled = true
+path = /var/lib/grafana/dashboards
 
 #################################### AMPQ Event Publisher ##########################
 [event_publisher]
