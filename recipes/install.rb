@@ -13,6 +13,7 @@ when 'debian'
   apt_repository 'grafana' do
     repo = node['grafana']['use_unstable_repo'] ? 'grafana/testing' : 'grafana/stable'
     uri "#{node['grafana']['repo_url']}/#{repo}/debian"
+    distribution ''
     components %w(wheezy main)
     key "#{node['grafana']['repo_url']}/gpg.key"
     action :add
