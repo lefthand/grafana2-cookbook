@@ -27,7 +27,7 @@ logs = <%= node['grafana']['log_dir'] %>
 http_port = <%= node['grafana']['port'] %>
 
 # The public facing domain name used to access grafana from a browser
-;domain = <%= node['grafana']['domain'] %>
+domain = <%= node['grafana']['domain'] %>
 
 # Redirect to correct domain if host header does not match domain
 # Prevents DNS rebinding attacks
